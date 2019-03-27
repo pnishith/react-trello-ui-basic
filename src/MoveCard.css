@@ -1,0 +1,64 @@
+html,
+body {
+    background: #707A83;
+    margin: 0;
+    padding: 0;
+}
+
+
+p, h5 {
+    margin: 0;
+    padding: 0;
+}
+
+.MoveCard {
+    display: inline-flex;
+    margin: 10px;
+    width: 100vw;
+
+}
+
+.cards {
+    width: 216px !important;
+    margin: 2px 7px 7px 7px !important;
+    padding: 10px !important;
+    background-color: #F5F5F7;
+    border-radius: 5px;
+    font-size: 14px !important;
+    text-align: left;
+    cursor: pointer;
+}
+
+.contents {
+    font-size: 11px;
+}
+
+.minContentHeight {
+    height: min-content;
+}
+
+.listWrapper {
+    background: #C7CED3;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.listHeading {
+    margin: 10px 0px 2px 17px;
+}
+
+.sortableListData {
+    width: 250px;
+    min-height: 20px;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 0 0 0;
+    float: left;
+}
+
+.sortableListData li{
+    margin: 0 5px 5px 5px;
+    padding: 5px;
+    font-size: 1.2em;
+    width: 120px;
+}
