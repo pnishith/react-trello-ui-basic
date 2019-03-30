@@ -2,78 +2,66 @@ import React, { Component } from 'react';
 import './MoveCard.css';
 import $ from 'jquery';
 import 'jquery-ui/ui/widgets/sortable';
+import { TRELLO_ITEMS } from './data';
 
 class MoveCard extends Component {
 
     componentDidMount = () => {
-        this.$node = $(this.refs.sortableListData);
-        this.$node.push($(this.refs.sortableListData1))
-        this.$node.push($(this.refs.sortableListData2))
-        this.$node.sortable({
-            connectWith: ".connectedSortable",
-            'enable':'enable',
-            
+        $(function () {
+            $(".sortableListData").sortable({
+                connectWith: ".sortableListData",
+                update: function (event, ui) {
+                    var changedList = this.id;
+                    var order = $(this).sortable('toArray');
+
+                    TRELLO_ITEMS.forEach((element, i) => {
+                        if (element.ref == changedList) {
+                            TRELLO_ITEMS[i].items = order.map((item) => JSON.parse(item))
+                        }
+                    });
+
+                    console.log({
+                        id: changedList,
+                        positions: order,
+                        TrelloItems: TRELLO_ITEMS
+                    });
+                }
+            });
         });
+    }
+
+    renderTrelloItems = () => {
+        return TRELLO_ITEMS.map((item, i) => {
+            console.log(item);
+            if (this.$node) this.$node.push($(this.refs[item.ref]));
+
+            return (
+                <div className="listWrapper minContentHeight" key={item.ref}>
+                    <h5 className="listHeading">{item.listName}</h5>
+                    <ul id={item.ref} ref={item.ref} className="connectedSortable minContentHeight sortableListData">
+                        {item.items.length > 0
+                            ? item.items.map((cardItem, i) => {
+                                return (
+                                    <li id={JSON.stringify(cardItem)} className="cards" key={i} onDragStart={(e) => console.log(e)} onDrop={(e) => { this.updatedList(e, cardItem) }}>
+                                        <div>{cardItem.cardName}</div>
+                                        <div className="contents">
+                                            {cardItem.description}
+                                        </div>
+                                    </li>
+                                )
+                            })
+                            : null
+                        }
+                    </ul>
+                </div>
+            )
+        })
     }
 
     render() {
         return (
             <div className="MoveCard">
-                <div className="listWrapper minContentHeight">
-                    <h5 className="listHeading">List 1</h5>
-                    <ul ref="sortableListData" className="connectedSortable minContentHeight sortableListData">
-                        <li className="cards">
-                            <div>Item 1</div>
-                            <div className="contents">
-                                Content test Content test Content test Content test Content test Content test
-                            </div>
-                        </li>
-                        <li className="cards">
-                            <div>Item 2</div>
-                            <div className="contents">
-                            </div>
-                        </li>
-                        <li className="cards">
-                            <div>Item 3</div>
-                            <div className="contents">
-                            </div>
-                        </li>
-                        <li className="cards">
-                            <div>Item 4</div>
-                            <div className="contents">
-                                Content test Content test Content test Content test Content test Content test
-                            </div>
-                        </li>
-                        <li className="cards">
-                            <div>Item 5</div>
-                            <div className="contents">
-                            </div>
-                        </li>
-                        <li className="cards">
-                            <div>Item 6</div>
-                            <div className="contents">
-                            </div>
-                        </li>
-                        <li className="cards">
-                            <div>Item 7</div>
-                            <div className="contents">
-                                Content test Content test Content test Content test Content test Content test
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div className="listWrapper minContentHeight">
-                    <h5 className="listHeading">List 2</h5>
-                    <ul ref="sortableListData1" className="connectedSortable minContentHeight sortableListData">
-
-                    </ul>
-                </div>
-                <div className="listWrapper minContentHeight">
-                    <h5 className="listHeading">List 3</h5>
-                    <ul ref="sortableListData2" className="connectedSortable minContentHeight sortableListData">
-
-                    </ul>
-                </div>
+                {this.renderTrelloItems()}
             </div>
         );
     }
